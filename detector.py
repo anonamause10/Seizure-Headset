@@ -1,0 +1,13 @@
+import serial
+ser = serial.Serial('COM6',baudrate=57600,timeout=5)
+ser.flushInput()
+
+while True:
+    try:
+        ser_bytes = ser.readline()
+        #print(ser_bytes)
+        decoded_bytes = ser_bytes[0:len(ser_bytes)-2].decode("utf-8")
+        print(decoded_bytes)
+    except:
+        print("Keyboard Interrupt")
+        break
