@@ -7,7 +7,9 @@ while True:
         ser_bytes = ser.readline()
         #print(ser_bytes)
         decoded_bytes = ser_bytes[0:len(ser_bytes)-2].decode("utf-8")
-        print(decoded_bytes)
+        if not "ERROR" in decoded_bytes:
+            print(decoded_bytes)
     except:
         print("Keyboard Interrupt")
+        print(ser.readline())
         break
