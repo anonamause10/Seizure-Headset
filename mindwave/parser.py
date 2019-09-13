@@ -45,16 +45,17 @@ class ThinkGearParser(object):
         self.recorders = []
         if recorders is not None:
             self.recorders += recorders
-        self.input_data = ""
+        self.input_data = bytearray()
         self.parser = self.parse()
-        self.parser.next()
+        next(self.parser)
 
     def feed(self, data):
         for c in data:
-            self.parser.send(ord(c))
+            self.parser.send(c)
         for recorder in self.recorders:
             recorder.finish_chunk()
         self.input_data += data
+        print(data)
     def dispatch_data(self, key, value):
         for recorder in self.recorders:
             recorder.dispatch_data(key, value)
@@ -91,7 +92,7 @@ class ThinkGearParser(object):
                                 row_length = yield
                                 a = yield
                                 b = yield
-                                value = struct.unpack("<h",chr(b)+chr(a))[0]
+                                value = struct.unpack("<h", bytes([b, a]))[0]
                                 self.dispatch_data("raw", value)
                                 left -= 2
                             elif packet_code == 0x02: # Poor signal
@@ -101,14 +102,14 @@ class ThinkGearParser(object):
                             elif packet_code == 0x04: # Attention (eSense)
                                 a = yield
                                 if a>0:
-                                    v = struct.unpack("b",chr(a))[0]
+                                    v = struct.unpack("<h", bytes([b, a]))[0]
                                     if 0 < v <= 100:
                                         self.dispatch_data("attention", v)
                                 left-=1
                             elif packet_code == 0x05: # Meditation (eSense)
                                 a = yield
                                 if a>0:
-                                    v = struct.unpack("b",chr(a))[0]
+                                    v = struct.unpack("<h", bytes([b, a]))[0]
                                     if 0 < v <= 100:
                                         self.dispatch_data("meditation", v)
                                 left-=1

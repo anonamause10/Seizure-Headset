@@ -40,8 +40,8 @@ if __name__ == '__main__':
     bar = ProgressBar(widgets=[measure_name, Percentage(), Bar()]).start()
 
     while 1:
-        time.sleep(0.25)
-        data = socket.recv(20000)
+        time.sleep(0.03)
+        data = socket.recv(2000)
         parser.feed(data)
         v = 0
         if args.measure == 'attention':
@@ -52,4 +52,4 @@ if __name__ == '__main__':
                 v = recorder.meditation[-1]
         if v>0:
             bar.start()
-            bar.update(v)
+            #bar.update(v)
