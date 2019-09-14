@@ -1,5 +1,6 @@
 import serial
-ser = serial.Serial('COM6',baudrate=57600,timeout=5)
+ser = serial.Serial('/dev/tty.usbmodem14101',baudrate=57600,timeout=5)
+#ser = serial.Serial('COM6',baudrate=57600,timeout=5)
 ser.flushInput()
 
 while True:
